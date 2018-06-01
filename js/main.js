@@ -54,7 +54,7 @@ $(document).ready(function() {
 		}
 
 		recognition.onspeechend = function() {
-	        og('Silencio detectado. Reconhecimento de voz desativado');
+	        log('Silencio detectado. Reconhecimento de voz desativado');
 		}
 
 		recognition.onerror = function(event) {
@@ -65,7 +65,7 @@ $(document).ready(function() {
 
 		recognition.onend = function(event) {
             log('Reconhecimento de voz finalizado');
-			//if (continuous) recognition.start();
+			if (continuous) recognition.start();
 		}
 
 		recognition.onresult = function(event) {
