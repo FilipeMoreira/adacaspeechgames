@@ -82,9 +82,9 @@ $(document).ready(function() {
             log('Fala detectada', transcript);
 
             if (!transcript.toLowerCase().includes(target)) {
-                $(".board").css('box-shadow','0 3px 3px 1px rgba(255,64,64,0.3)');
+                $(".board").css('border','solid 2px #ff5555');
             } else {
-                $(".board").css('box-shadow','0 3px 3px 1px rgba(64,255,64,0.3)');
+                $(".board").css('border','solid 2px #55ff55');
                 continuous = false;
             }
         }
