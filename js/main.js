@@ -82,9 +82,12 @@ $(document).ready(function() {
             log('Fala detectada', transcript);
 
             if (!transcript.toLowerCase().includes(target)) {
-                $(".board").css('border','solid 2px #ff5555');
+                $(".board").css('border','solid 4px #ff5555');
+                setTimeout(() => {
+                    $(".board").css('border','none');
+                }, 1000);
             } else {
-                $(".board").css('border','solid 2px #55ff55');
+                $(".board").css('border','solid 4px #55ff55');
                 continuous = false;
             }
         }
