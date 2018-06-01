@@ -37,13 +37,9 @@ $(document).ready(function() {
         }
     }, 500);
 
-    var gameContinue = true;
-
     let target = pickTarget();
 
     $(".target").text(target);
-
-    let shot = null;
 
     try {
 		var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -69,7 +65,7 @@ $(document).ready(function() {
 
 		recognition.onend = function(event) {
             log('Reconhecimento de voz finalizado');
-			if (continuous) recognition.start();
+			//if (continuous) recognition.start();
 		}
 
 		recognition.onresult = function(event) {
@@ -93,12 +89,11 @@ $(document).ready(function() {
             }
         }
 
-        recognition.start();
-
 	} catch(e) {
 		console.error(e);
 	}
 
+    recognition.start();
 
     // ---------------------- functions ----------------------
     function getBoardPreferredDimensions ( _ratio = 0.8 ) {
