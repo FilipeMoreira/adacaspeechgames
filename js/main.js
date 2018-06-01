@@ -81,7 +81,7 @@ $(document).ready(function() {
             // Add the current transcript to the contents of our Note.
             log('Fala detectada', transcript);
 
-            if (!transcript.includes(target)) {
+            if (!transcript.toLowerCase().includes(target)) {
                 $(".board").css('box-shadow','0 3px 3px 1px rgba(255,64,64,0.3);');
             } else {
                 $(".board").css('box-shadow','0 3px 3px 1px rgba(64,255,64,0.3);');
