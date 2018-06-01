@@ -68,6 +68,7 @@ $(document).ready(function() {
 		}
 
 		recognition.onend = function(event) {
+            log('Reconhecimento de voz finalizado');
 			if (continuous) recognition.start();
 		}
 
