@@ -134,7 +134,7 @@ $(document).ready(function() {
 
     function endRound(previousTargets) {
         if (previousTargets.length >= _words.length) log("Game ended");
-        else newRound();
+        else newRound(previousTargets);
     }
 
     function log (message, value = null, type = "info") {
