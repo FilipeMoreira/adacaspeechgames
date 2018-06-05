@@ -1,13 +1,11 @@
+require('words.js');
+
 $(document).ready(function() {
     log('Window width', $(window).width());
     log('Window height', $(window).height());
 
     var targets = {
-        words: {
-            easy: ["casa", "bota", "roda", "pipa", "vida"],
-            medium: ["carro", "portal", "retrato", "cadeira"],
-            hard: ["computador", "ventilador", "cafeteria"]
-        },
+        words: _words,
 
         numbers: {
             easy: {min: 0, max: 20},
@@ -37,66 +35,11 @@ $(document).ready(function() {
         }
     }, 500);
 
-    let target = pickTarget();
+    // game start
+    let previousTargets = [];
+    let mode = 'words';
 
-    $(".target").text(target);
-
-    try {
-		var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-		var recognition = new SpeechRecognition();
-		recognition.lang = 'pt-BR';
-		recognition.maxAlternatives = 5;
-
-        var continuous = true;
-
-		recognition.onstart = function() { 
-		    log('Reconhecimento de voz ativado');
-		}
-
-		recognition.onspeechend = function() {
-	        log('Silencio detectado. Reconhecimento de voz desativado');
-		}
-
-		recognition.onerror = function(event) {
-            if(event.error == 'no-speech') {
-                log('Nenhuma fala foi detectada.');
-			}
-		}
-
-		recognition.onend = function(event) {
-            log('Reconhecimento de voz finalizado');
-			if (continuous) recognition.start();
-		}
-
-		recognition.onresult = function(event) {
-
-            // event is a SpeechRecognitionEvent object.
-            // It holds all the lines we have captured so far. 
-            // We only need the current one.
-            var current = event.resultIndex;
-
-            // Get a transcript of what was said.
-            var transcript = event.results[current][0].transcript;
-
-            // Add the current transcript to the contents of our Note.
-            log('Fala detectada', transcript);
-
-            if (!transcript.toLowerCase().includes(target)) {
-                $(".board").css('border','solid 4px #ff5555');
-                setTimeout(() => {
-                    $(".board").css('border','none');
-                }, 1000);
-            } else {
-                $(".board").css('border','solid 4px #55ff55');
-                continuous = false;
-            }
-        }
-
-	} catch(e) {
-		console.error(e);
-	}
-
-    recognition.start();
+    newRound(previousTargets);
 
     // ---------------------- functions ----------------------
     function getBoardPreferredDimensions ( _ratio = 0.8 ) {
@@ -113,12 +56,87 @@ $(document).ready(function() {
         return baseValue;
     }
 
-    function pickTarget (mode = 'words', dificulty = 'medium') {
-        let randomRange = targets[mode][dificulty].length;
-        let pick = parseInt( Math.random() * randomRange );
-        let target = targets[mode][dificulty][pick];
+    function pickTarget (mode = 'words', previousTargets = []) {
+        const randomRange = targets[mode].length;
+        let pick;
+        do
+            pick = parseInt( Math.random() * randomRange );
+        while(previousTargets.includes(pick));
+        let target = targets[mode][pick];
         log('Target selected', target);
         return target;
+    }
+
+    function newRound(previousTargets) {
+        let target = pickTarget(mode, previousTargets);
+        previousTargets.push(target);
+
+        $(".board").css('border','none');        
+        $(".target").text(target);
+
+        try {
+            var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            var recognition = new SpeechRecognition();
+            recognition.lang = 'pt-BR';
+            recognition.maxAlternatives = 5;
+
+            var continuous = true;
+
+            recognition.onstart = function() { 
+                log('Reconhecimento de voz ativado');
+            }
+
+            recognition.onspeechend = function() {
+                log('Silencio detectado. Reconhecimento de voz desativado');
+            }
+
+            recognition.onerror = function(event) {
+                if(event.error == 'no-speech') {
+                    log('Nenhuma fala foi detectada.');
+                }
+            }
+
+            recognition.onend = function(event) {
+                log('Reconhecimento de voz finalizado');
+                if (continuous) recognition.start();
+            }
+
+            recognition.onresult = function(event) {
+
+                // event is a SpeechRecognitionEvent object.
+                // It holds all the lines we have captured so far. 
+                // We only need the current one.
+                var current = event.resultIndex;
+
+                // Get a transcript of what was said.
+                var transcript = event.results[current][0].transcript;
+
+                // Add the current transcript to the contents of our Note.
+                log('Fala detectada', transcript);
+
+                if (!transcript.toLowerCase().includes(target)) {
+                    $(".board").css('border','solid 4px #ff5555');
+                    setTimeout(() => {
+                        $(".board").css('border','none');
+                    }, 1000);
+                } else {
+                    $(".board").css('border','solid 4px #55ff55');
+                    continuous = false;
+
+                    endRound(previousTargets);
+                }
+            }
+
+        } catch(e) {
+            console.error(e);
+        }
+
+        recognition.start();
+    }
+
+    function endRound(previousTargets) {
+        if (previousTargets.length >= _words.length) log("Game ended");
+        else newRound();
     }
 
     function log (message, value = null, type = "info") {
