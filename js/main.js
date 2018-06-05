@@ -1,5 +1,3 @@
-require('words.js');
-
 $(document).ready(function() {
     log('Window width', $(window).width());
     log('Window height', $(window).height());
