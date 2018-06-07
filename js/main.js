@@ -142,7 +142,7 @@ $(document).ready(function() {
     }
 
     function getImage(tag, name) {
-        return "<img src='./images/" + tag + "/" + name + ".png style='max-height: 400px; max-width: 400px'/>";
+        return "<img src='./images/" + tag + "/" + name + ".png' style='max-height: 400px; max-width: 400px'/>";
     }
 
     function log (message, value = null, type = "info") {
