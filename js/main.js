@@ -5,6 +5,8 @@ $(document).ready(function() {
     var targets = {
         words: _words,
 
+        animals: ["abelha", "cachorro", "cavalo", "coelho", "galinha", "gato", "rato"],
+
         numbers: {
             easy: {min: 0, max: 20},
             medium: {min: 21, max: 100},
@@ -35,9 +37,9 @@ $(document).ready(function() {
 
     // game start
     let previousTargets = [];
-    let mode = 'words';
+    let mode = 'animals';
 
-    newRound(previousTargets);
+    newRound(mode, previousTargets);
 
     // ---------------------- functions ----------------------
     function getBoardPreferredDimensions ( _ratio = 0.8 ) {
@@ -65,12 +67,14 @@ $(document).ready(function() {
         return target;
     }
 
-    function newRound(previousTargets) {
+    function newRound(mode, previousTargets) {
         let target = pickTarget(mode, previousTargets);
         previousTargets.push(target);
 
-        $(".board").css('border','none');        
-        $(".target").text(target);
+        $(".board").css('border','none');
+        
+        if (mode === "animals") $(".target").html(getImage("animals/real", target));
+        else $(".target").text(target);
 
         try {
             var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -121,7 +125,7 @@ $(document).ready(function() {
                     $(".board").css('border','solid 4px #55ff55');
                     continuous = false;
 
-                    endRound(previousTargets);
+                    endRound(mode, previousTargets);
                 }
             }
 
@@ -134,7 +138,11 @@ $(document).ready(function() {
 
     function endRound(previousTargets) {
         if (previousTargets.length >= _words.length) log("Game ended");
-        else newRound(previousTargets);
+        else newRound(mode, previousTargets);
+    }
+
+    function getImage(tag, name) {
+        return "<img src='./images/" + tag + "/" + name + ".png style='max-height: 400px; max-width: 400px'/>";
     }
 
     function log (message, value = null, type = "info") {
