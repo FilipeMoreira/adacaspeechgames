@@ -69,7 +69,7 @@ $(document).ready(function() {
         let pick;
         do
             pick = parseInt( Math.random() * randomRange );
-        while(previousTargets[pick]);
+        while(arrayContains(previousTargets, pick));
         let target = targets[mode][pick];
         log('Target selected', target);
         return target;
@@ -167,6 +167,13 @@ $(document).ready(function() {
               if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
             });
         return result;
+    }
+
+    function arrayContains(array, target) {
+        array.forEach(function(item) {
+            if (item == target) return true;
+        });
+        return false;
     }
 
     function log (message, value = null, type = "info") {
