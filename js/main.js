@@ -135,7 +135,9 @@ $(document).ready(function() {
                     $(".board").css('border','solid 4px #55ff55');
                     continuous = false;
 
-                    endRound(mode, previousTargets);
+                    setTimeout(() => {
+                        endRound(mode, previousTargets);
+                    }, 1000);
                 }
             }
 
