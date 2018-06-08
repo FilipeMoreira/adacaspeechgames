@@ -2,6 +2,8 @@ $(document).ready(function() {
     log('Window width', $(window).width());
     log('Window height', $(window).height());
 
+    var spec = "";
+
     var targets = {
         words: _words,
 
@@ -37,7 +39,13 @@ $(document).ready(function() {
 
     // game start
     var previousTargets = [];
-    let mode = 'animals';
+
+    let mode = findGetParameter("mode");
+    if (mode === null) mode = "words";
+    else if (mode === "animals") {
+        spec = findGetParameter("spec");
+        if (spec === "") alert("No specification detected");
+    }
 
     newRound(mode, previousTargets);
 
@@ -61,7 +69,7 @@ $(document).ready(function() {
         let pick;
         do
             pick = parseInt( Math.random() * randomRange );
-        while(previousTargets.includes(pick));
+        while(previousTargets[pick]);
         let target = targets[mode][pick];
         log('Target selected', target);
         return target;
@@ -75,7 +83,7 @@ $(document).ready(function() {
 
         $(".board").css('border','none');
         
-        if (mode === "animals") $(".target").html(getImage("animals/real", target));
+        if (mode === "animals") $(".target").html(getImage("animals/" + spec, target));
         else $(".target").text(target);
 
         try {
@@ -146,6 +154,19 @@ $(document).ready(function() {
 
     function getImage(tag, name) {
         return "<img src='./images/" + tag + "/" + name + ".png' style='max-height: 400px; max-width: 400px'/>";
+    }
+
+    function findGetParameter(parameterName) {
+        var result = null,
+            tmp = [];
+        location.search
+            .substr(1)
+            .split("&")
+            .forEach(function (item) {
+              tmp = item.split("=");
+              if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+            });
+        return result;
     }
 
     function log (message, value = null, type = "info") {
