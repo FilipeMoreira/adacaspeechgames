@@ -36,7 +36,7 @@ $(document).ready(function() {
     }, 500);
 
     // game start
-    let previousTargets = [];
+    var previousTargets = [];
     let mode = 'animals';
 
     newRound(mode, previousTargets);
@@ -69,7 +69,9 @@ $(document).ready(function() {
 
     function newRound(mode, previousTargets) {
         let target = pickTarget(mode, previousTargets);
+        console.log(previousTargets);
         previousTargets.push(target);
+        console.log(previousTargets);
 
         $(".board").css('border','none');
         
@@ -137,6 +139,7 @@ $(document).ready(function() {
     }
 
     function endRound(previousTargets) {
+        console.log(previousTargets);
         if (previousTargets.length >= _words.length) log("Game ended");
         else newRound(mode, previousTargets);
     }
