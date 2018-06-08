@@ -138,7 +138,7 @@ $(document).ready(function() {
         recognition.start();
     }
 
-    function endRound(previousTargets) {
+    function endRound(mode, previousTargets) {
         console.log(previousTargets);
         if (previousTargets.length >= _words.length) log("Game ended");
         else newRound(mode, previousTargets);
